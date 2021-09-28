@@ -48,12 +48,12 @@ o = OSCFunc({
 		// base case.
 		{true} {~synth = ~synth};
 
-}, '/tone2').add;
+}, ~synth).add;
 
 /*
 Synth function.
 */
-SynthDef.new("tone2", {
+SynthDef.new(~synth, {
 	arg freq, amp=0.6, gate=1, bend=0;
 	var freq_mod, raw_sig, filter_sig, sig, env,
 	lpf_cutoff=20000, hpf_cutoff=20, amp_mod,
@@ -89,6 +89,15 @@ SynthDef.new("tone2", {
 	Out.ar(0, sig);
 }).store;
 
+// send all parameters to OmniSynth upon compiling.
+~params = d.allControlNames;
+~params.do({ 
+	arg item, i; 
+	var param;
+	param = [i, item.name, item.defaultValue];
+	n.sendMsg("/params", ~synth, param[0], param[1], param[2]);
+});
+
 /*
 Note on function.
 */
@@ -96,7 +105,6 @@ MIDIdef.noteOn(\noteOnDef, {
 	arg vel, nn, chan, src;
 	var temp;
 	[vel, nn].postln;
-	"tone2?".postln;
 	n.sendMsg("/noteOn",nn,vel);
 	~notes[nn] = Synth.new(
 		~synth,

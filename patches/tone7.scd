@@ -54,12 +54,12 @@ o = OSCFunc({
 		// base case - set synth to default patch.
 		{true} {~synth = ~synth};
 
-}, '/tone7').add;
+}, ~synth).add;
 
 /*
 Synth function.
 */
-SynthDef.new(\tone7, {
+d = SynthDef.new(~synth, {
 	arg freq=440, amp=0.6, gate=1, bend=0,
 	lpf_cutoff=20000, hpf_cutoff=20,
 	attack_time=0.01, decay_time=0.3, sustain=0.5,
