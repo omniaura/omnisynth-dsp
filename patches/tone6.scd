@@ -65,12 +65,12 @@ o = OSCFunc({
 		// base case - set synth to default patch.
 		{true} {~synth = ~synth};
 
-}, '/tone6').add;
+}, ~synth).add;
 
 /*
 Synth function.
 */
-SynthDef.new("tone6", {
+d = SynthDef.new(~synth, {
 
 	arg freq=440, lpf_cutoff=20000, hpf_cutoff=20,
 		amp=0.6, gate=1, bend=0, out=0, mod_freq=100, mod_amp=300,
@@ -108,6 +108,15 @@ SynthDef.new("tone6", {
 
 	Out.ar(out, sig);
 }).store;
+
+// send all parameters to OmniSynth upon compiling.
+~params = d.allControlNames;
+~params.do({ 
+	arg item, i; 
+	var param;
+	param = [i, item.name, item.defaultValue];
+	n.sendMsg("/params", ~synth, param[0], param[1], param[2]);
+});
 
 /*
 Note on function.

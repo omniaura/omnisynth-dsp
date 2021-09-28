@@ -4,9 +4,6 @@ author: Omar Barazanji
 date: 11/11/20
 */
 
-s.boot;
-n = NetAddr.new("127.0.0.1", 7771);
-
 ~bend = 8193;
 ~notes = Array.newClear(128);
 ~synth = "tone1";

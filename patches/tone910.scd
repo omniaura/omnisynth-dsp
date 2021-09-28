@@ -54,12 +54,12 @@ o = OSCFunc({
 		// base case - set synth to default patch.
 		{true} {~synth = ~synth};
 
-}, '/tone910').add;
+}, ~synth).add;
 
 /*
 Synth function.
 */
-SynthDef.new(\tone910, {
+d = SynthDef.new(\tone910, {
 	arg freq=440, amp=0.6, gate=1, bend=0,
 	lpf_cutoff=20000, hpf_cutoff=20,
 	attack_time=0.01, decay_time=0.3, sustain=0.5,
@@ -71,7 +71,7 @@ SynthDef.new(\tone910, {
 	/*
 	signal creation section.
 	*/
-	grain_env = Line.kr(200,17000,1);
+	grain_env = XLine.kr(1,5000,1);
 	raw_sig = GrainFM.ar(trigger: grain_env,
 		carfreq: freq,
 		modfreq:mod_freq * bend.midiratio);
@@ -96,6 +96,15 @@ SynthDef.new(\tone910, {
 
 	Out.ar(0, sig);
 }).store;
+
+// send all parameters to OmniSynth upon compiling.
+~params = d.allControlNames;
+~params.do({ 
+	arg item, i; 
+	var param;
+	param = [i, item.name, item.defaultValue];
+	n.sendMsg("/params", ~synth, param[0], param[1], param[2]);
+});
 
 /*
 Note on function.
