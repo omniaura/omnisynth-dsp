@@ -8,6 +8,8 @@ date: 1/16/21
 s.boot;
 
 Server.default.options.device = "ASIO : ASIO4ALL v2";
+~output_devices = ServerOptions.outDevices;
+
 
 // Default patch
 ~synth = "tone1";
@@ -48,6 +50,10 @@ o = OSCFunc( {
 
 		{msg[1] == "exitSel".asSymbol} {
 			Server.killAll;
+		}
+
+		{msg[1] == "outDev".asSymbol} {
+			n.sendMsg("/outDev", ~output_devices);
 		}
 
 		// compiles all SynthDef's.

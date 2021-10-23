@@ -4,14 +4,14 @@ a = Scale.melodicMinor;
 Pdef (
 	\pattern10,
 	Pbind(
-		\instrument, \tone8,
+		\instrument, \tone1,
 		\scale, a,
 		\degree, Pseq((4..3)++(1..0) ,inf),
 		\root, -16,
 		\out, 0,
 		\amp, Pexprand(0.03, 0.06, inf),
 		\gate, 1,
-		\mod_freq, Pwhite(102, 106, inf),
+		\mod_freq, 100,
 		\lpf_cutoff, 1200, 
 		\hpf_cutoff, 900,
 		\attack_time, Pexprand(0.07, 0.09, inf), 
