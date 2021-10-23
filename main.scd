@@ -8,7 +8,13 @@ date: 1/16/21
 s.boot;
 
 Server.default.options.device = "ASIO : ASIO4ALL v2";
-
+~output_devices = ServerOptions.outDevices;
+~output_devices.do({ 
+	arg item, i; 
+	var out_dev;
+	out_dev = [i, item];
+	n.sendMsg("/outDev", out_dev[0], out_dev[1]);
+}); 
 // Default patch
 ~synth = "tone1";
 
@@ -54,6 +60,11 @@ o = OSCFunc( {
 		{msg[1] == "compile".asSymbol} {
 			msg[2].asString.load;
 			MIDIdef.freeAll;
+		}
+
+		{msg[1] == "outDevSel".asSymbol} {
+			Server.default.options.outDevice_((msg[2].asString));
+			Server.default.reboot;
 		}
 
 		{msg[1] == "pdef_control".asSymbol} {
