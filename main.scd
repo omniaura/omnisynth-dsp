@@ -7,6 +7,9 @@ date: 1/16/21
 // boot server
 s.boot;
 
+// Connection to OSC via localhost.
+n = NetAddr.new("127.0.0.1", 7771);
+
 Server.default.options.device = "ASIO : ASIO4ALL v2";
 ~output_devices = ServerOptions.outDevices;
 ~output_devices.do({ 
@@ -25,8 +28,6 @@ nil.set(\freq, 880);
 MIDIClient.init;
 MIDIIn.connectAll;
 
-// Connection to OSC via localhost.
-n = NetAddr.new("127.0.0.1", 7771);
 
 // begin main
 (
