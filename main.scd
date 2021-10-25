@@ -16,8 +16,13 @@ p.device = "ASIO : ASIO4ALL v2";
 // Set memSize to 16MB (from 8MB default)
 p.memSize = 16384;
 
+// Suppress informational messages
+// Set this to 0 for more messages,
+// Or -2 to suppress error and poll messages
+p.verbosity = -1;
+
 // boot server
-Server.default.boot;
+s.boot;
 
 // Connection to OSC via localhost.
 n = NetAddr.new("127.0.0.1", 7771);
@@ -31,8 +36,6 @@ nil.set(\freq, 880);
 // Grab any MIDI device plugged in.
 MIDIClient.init;
 MIDIIn.connectAll;
-
-1.wait;
 
 // Fetch audio devices
 ~output_devices = ServerOptions.outDevices;
