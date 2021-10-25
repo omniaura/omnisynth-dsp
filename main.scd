@@ -49,7 +49,8 @@ Routine({
 		var out_dev;
 		out_dev = [i, item];
 		n.sendMsg("/outDev", out_dev[0], out_dev[1]);
-		// wait 5ms of a second before sending the next request
+		// wait 5ms before sending the next request
+		// todo: bundle this so we send all at once?
 		(0.005).wait;
 	});
 }).play;
