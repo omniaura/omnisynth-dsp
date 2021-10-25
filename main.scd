@@ -14,7 +14,8 @@ p = Server.default.options;
 p.device = "ASIO : ASIO4ALL v2";
 
 // Set memSize to 16MB (from 8MB default)
-p.memSize = 16384;
+// Only use if you're having memory issues
+// p.memSize = 16384;
 
 // Suppress informational messages
 // Set this to 0 for more messages,
