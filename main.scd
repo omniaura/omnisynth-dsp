@@ -4,20 +4,30 @@ author: Omar Barazanji
 date: 1/16/21
 */
 
+/*
+Set server options
+*/
+
+p = Server.default.options;
+
+// Set default device to ASIO
+p.device = "ASIO : ASIO4ALL v2";
+
+// Set memSize to 16MB (from 8MB default)
+// Only use if you're having memory issues
+// p.memSize = 16384;
+
+// Suppress informational messages
+// Set this to 0 for more messages,
+// Or -2 to suppress error and poll messages
+p.verbosity = -1;
+
 // boot server
 s.boot;
 
 // Connection to OSC via localhost.
 n = NetAddr.new("127.0.0.1", 7771);
 
-Server.default.options.device = "ASIO : ASIO4ALL v2";
-~output_devices = ServerOptions.outDevices;
-~output_devices.do({ 
-	arg item, i; 
-	var out_dev;
-	out_dev = [i, item];
-	n.sendMsg("/outDev", out_dev[0], out_dev[1]);
-}); 
 // Default patch
 ~synth = "tone1";
 
@@ -28,6 +38,22 @@ nil.set(\freq, 880);
 MIDIClient.init;
 MIDIIn.connectAll;
 
+// Fetch audio devices
+~output_devices = ServerOptions.outDevices;
+Routine({
+	// We wait 1 second because SC takes some time
+	// to get the full list of output devices
+	1.wait;
+	~output_devices.do({
+		arg item, i;
+		var out_dev;
+		out_dev = [i, item];
+		n.sendMsg("/outDev", out_dev[0], out_dev[1]);
+		// wait 5ms before sending the next request
+		// todo: bundle this so we send all at once?
+		(0.005).wait;
+	});
+}).play;
 
 // begin main
 (
