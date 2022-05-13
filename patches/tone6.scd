@@ -9,10 +9,10 @@ date: 11/11/20
 ~synth = "tone6";
 ~lpf_cutoff = 20000;
 ~hpf_cutoff = 20;
-~attack_time = 0.01;
-~decay_time = 0.3;
+~attack = 0.01;
+~decay = 0.3;
 ~sustain = 0.5;
-~release_time = 1.0;
+~release = 1.0;
 ~lin_start=1000;
 ~lin_stop=1;
 ~lin_duration=1;
@@ -37,16 +37,16 @@ o = OSCFunc({
 				~hpf_cutoff = msg[3].asFloat;
 			};
 			if (msg[2] == "attack".asSymbol) {
-				~attack_time = msg[3].asFloat;
+				~attack = msg[3].asFloat;
 			};
 			if (msg[2] == "decay".asSymbol) {
-				~decay_time = msg[3].asFloat;
+				~decay = msg[3].asFloat;
 			};
 			if (msg[2] == "sustain".asSymbol) {
 				~sustain = msg[3].asFloat;
 			};
 			if (msg[2] == "release".asSymbol) {
-				~release_time = msg[3].asFloat;
+				~release = msg[3].asFloat;
 			};
 			if (msg[2] == "mod_freq".asSymbol) {
 				~mod_freq = msg[3].asFloat;
@@ -74,7 +74,7 @@ d = SynthDef.new(~synth, {
 
 	arg freq=440, lpf_cutoff=20000, hpf_cutoff=20,
 		amp=0.6, gate=1, bend=0, out=0, mod_freq=100, mod_amp=300,
-		attack_time=0.01, decay_time=0.3, sustain=0.5, release_time=1.0,
+		attack=0.01, decay=0.3, sustain=0.5, release=1.0,
 		bias=0.0, lin_start=1000, lin_stop=1, lin_duration=1;
 
 	var sig, mod_sig, raw_sig, filter_sig, adsr, env, mod;
@@ -88,8 +88,8 @@ d = SynthDef.new(~synth, {
 	/*
 	Envelope section.
 	*/
-	adsr = EnvGen.kr(Env.adsr(attack_time,decay_time,sustain,
-		release_time, -4, bias), gate, doneAction:2);
+	adsr = EnvGen.kr(Env.adsr(attack,decay,sustain,
+		release, -4, bias), gate, doneAction:2);
         // doneAction:2 free's the synthDef
 
 	env = XLine.kr(lin_start,lin_stop,lin_duration,mul:0.04, doneAction:0);
@@ -135,10 +135,10 @@ MIDIdef.noteOn(\noteOnDef, {
 			\bend, ~bend.linlin(0,16383,-2,2),
 			\lpf_cutoff, ~lpf_cutoff,
 			\hpf_cutoff, ~hpf_cutoff,
-			\attack_time, ~attack_time,
-			\decay_time, ~decay_time,
+			\attack, ~attack,
+			\decay, ~decay,
 			\sustain, ~sustain,
-			\release_time, ~release_time,
+			\release, ~release,
 			\mod_freq, ~mod_freq,
 			\mod_amp, ~mod_amp,
 		]
