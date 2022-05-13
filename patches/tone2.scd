@@ -8,10 +8,10 @@ date: 1/13/21
 ~synth = "tone2";
 ~lpf_cutoff = 20000;
 ~hpf_cutoff = 20;
-~attack_time = 0.01;
-~decay_time = 0.3;
+~attack = 0.01;
+~decay = 0.3;
 ~sustain = 0.5;
-~release_time = 1.0;
+~release = 1.0;
 
 o = OSCFunc({
 
@@ -32,16 +32,16 @@ o = OSCFunc({
 				~hpf_cutoff = msg[3].asFloat;
 			};
 			if (msg[2] == "attack".asSymbol) {
-				~attack_time = msg[3].asFloat;
+				~attack = msg[3].asFloat;
 			};
 			if (msg[2] == "decay".asSymbol) {
-				~decay_time = msg[3].asFloat;
+				~decay = msg[3].asFloat;
 			};
 			if (msg[2] == "sustain".asSymbol) {
 				~sustain = msg[3].asFloat;
 			};
 			if (msg[2] == "release".asSymbol) {
-				~release_time = msg[3].asFloat;
+				~release = msg[3].asFloat;
 			};
 		}
 
@@ -57,7 +57,7 @@ SynthDef.new(~synth, {
 	arg freq, amp=0.6, gate=1, bend=0;
 	var freq_mod, raw_sig, filter_sig, sig, env,
 	lpf_cutoff=20000, hpf_cutoff=20, amp_mod,
-	attack_time=0.01, decay_time=0.3, sustain=0.5, release_time=1.0,
+	attack=0.01, decay=0.3, sustain=0.5, release=1.0,
 	bias=0.0;
 
 	/*
@@ -71,8 +71,8 @@ SynthDef.new(~synth, {
 	Envelope section.
 	*/
 	env = EnvGen.kr(Env.adsr(
-		attack_time, decay_time,
-		sustain, release_time,
+		attack, decay,
+		sustain, release,
 		-4, bias), gate, doneAction:2);
 
 	/*
@@ -115,10 +115,10 @@ MIDIdef.noteOn(\noteOnDef, {
 			\bend, ~bend.linlin(0,16383,-2,2),
 			\lpf_cutoff, ~lpf_cutoff,
 			\hpf_cutoff, ~hpf_cutoff,
-			\attack_time, ~attack_time,
-			\decay_time, ~decay_time,
+			\attack, ~attack,
+			\decay, ~decay,
 			\sustain, ~sustain,
-			\release_time, ~release_time,
+			\release, ~release,
 		]
 	);
 });
