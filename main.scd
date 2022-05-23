@@ -95,14 +95,8 @@ o = OSCFunc( {
 		}
 
 		{msg[1] == "pdef_control".asSymbol} {
-			if (msg[2] == "start".asSymbol) {
-				Pdef(msg[4].asSymbol).play;
-			};
 			if (msg[2] == "compile".asSymbol) {
 				msg[3].asString.load;
-			};
-		    if (msg[2] == "stop".asSymbol) {
-			    Pdef(msg[4].asSymbol).stop;
 			};
 		}
 
