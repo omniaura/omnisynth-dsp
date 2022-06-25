@@ -40,10 +40,8 @@ MIDIIn.connectAll;
 
 // Fetch audio devices
 ~output_devices = ServerOptions.outDevices;
-Routine({
-	// We wait 1 second because SC takes some time
-	// to get the full list of output devices
-	1.wait;
+
+s.doWhenBooted({
 	~output_devices.do({
 		arg item, i;
 		var out_dev;
@@ -53,7 +51,9 @@ Routine({
 		// todo: bundle this so we send all at once?
 		(0.005).wait;
 	});
-}).play;
+	n.sendMsg("/server", "running");
+});
+
 
 // begin main
 (
