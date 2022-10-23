@@ -72,7 +72,7 @@ o = OSCFunc( {
 	case
 
 		// Synth patch selector.
-		{msg[1] == "synthSel".asSymbol} {
+		{msg[1] == "patchSel".asSymbol} {
 			~synth = msg[2].asString;
 			MIDIdef.freeAll;
 			msg[3].asString.load;
