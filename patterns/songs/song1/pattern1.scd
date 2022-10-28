@@ -65,7 +65,7 @@ o = OSCFunc({
 				Pdef('\pattern1').play;
 			};
 			if (msg[2] == "stop".asSymbol) {
-				Pdef('pattern1').stop;
+				Pdef('\pattern1').stop;
 			};
 		}
 
