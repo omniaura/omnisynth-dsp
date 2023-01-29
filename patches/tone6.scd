@@ -29,7 +29,7 @@ o = OSCFunc({
 	case
 
 		// Parameter adjustment.
-		{msg[1] == "paramSel".asSymbol} {
+		{msg[1] == "setParam".asSymbol} {
 			if (msg[2] == "lpf".asSymbol) {
 				~lpf_cutoff = msg[3].asFloat;
 			};

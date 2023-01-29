@@ -42,16 +42,19 @@ MIDIIn.connectAll;
 ~output_devices = ServerOptions.outDevices;
 
 s.doWhenBooted({
+	~devices_for_messages = List.new(0);
 	~output_devices.do({
 		arg item, i;
 		var out_dev;
 		out_dev = [i, item];
-		n.sendMsg("/outDev", out_dev[0], out_dev[1]);
-		// wait 5ms before sending the next request
-		// todo: bundle this so we send all at once?
-		(0.005).wait;
+		~devices_for_messages.add(out_dev)
+		// n.sendMsg("/outDev", out_dev[0], out_dev[1]);
+		// // wait 5ms before sending the next request
+		// // todo: bundle this so we send all at once?
+		// (0.005).wait;
 	});
-	n.sendMsg("/server", "running");
+	n.sendMsg("/setOutputDevices", *(~devices_for_messages.array))
+	n.sendMsg("/superColliderStatus", "running");
 });
 
 
@@ -71,30 +74,30 @@ o = OSCFunc( {
 
 	case
 
-		// Synth patch selector.
-		{msg[1] == "patchSel".asSymbol} {
+		// Synth patch selector. Sets the currently active patch
+		{msg[1] == "selectPatch".asSymbol} {
 			~synth = msg[2].asString;
 			MIDIdef.freeAll;
 			msg[3].asString.load;
 	        ~synth.postln;
 		}
 
-		{msg[1] == "exitSel".asSymbol} {
+		{msg[1] == "stopScSynth".asSymbol} {
 			Server.killAll;
 		}
 
 		// compiles all SynthDef's.
-		{msg[1] == "compile".asSymbol} {
+		{msg[1] == "precompileAllPatches".asSymbol} {
 			msg[2].asString.load;
 			MIDIdef.freeAll;
 		}
 
-		{msg[1] == "outDevSel".asSymbol} {
+		{msg[1] == "selectOutputDevice".asSymbol} {
 			Server.default.options.outDevice_((msg[2].asString));
 			Server.default.reboot;
 		}
 
-		{msg[1] == "pdef_control".asSymbol} {
+		{msg[1] == "controlPattern".asSymbol} {
 			if (msg[2] == "compile".asSymbol) {
 				msg[3].asString.load;
 			};
