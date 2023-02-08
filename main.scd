@@ -11,7 +11,7 @@ Set server options
 p = Server.default.options;
 
 // Set default device to ASIO
-p.device = "ASIO : ASIO4ALL v2";
+// p.device = "ASIO : ASIO4ALL v2";
 
 // Set memSize to 16MB (from 8MB default)
 // Only use if you're having memory issues
@@ -42,18 +42,21 @@ MIDIIn.connectAll;
 ~output_devices = ServerOptions.outDevices;
 
 s.doWhenBooted({
+	"Booted! Executing boot init logic...".postln;
 	~devices_for_messages = List.new(0);
 	~output_devices.do({
 		arg item, i;
 		var out_dev;
-		out_dev = [i, item];
-		~devices_for_messages.add(out_dev)
+		out_dev = [i.asInteger, item.asString];
+		~devices_for_messages.add(out_dev);
 		// n.sendMsg("/outDev", out_dev[0], out_dev[1]);
 		// // wait 5ms before sending the next request
 		// // todo: bundle this so we send all at once?
 		// (0.005).wait;
 	});
-	n.sendMsg("/setOutputDevices", *(~devices_for_messages.array))
+	"Sending 'setOutputDevices' message...".postln;
+	n.sendMsg("/setOutputDevices", *(~devices_for_messages.asArray));
+	"Sending 'superColliderStatus' message...".postln;
 	n.sendMsg("/superColliderStatus", "running");
 });
 
