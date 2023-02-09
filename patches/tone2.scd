@@ -95,7 +95,7 @@ SynthDef.new(~synth, {
 	arg item, i; 
 	var param;
 	param = [i, item.name, item.defaultValue];
-	n.sendMsg("/params", ~synth, param[0], param[1], param[2]);
+	n.sendMsg("/initPatchParams", ~synth, param[0], param[1], param[2]);
 });
 
 /*

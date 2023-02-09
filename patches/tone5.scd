@@ -104,7 +104,7 @@ d = SynthDef.new(~synth, {
 	arg item, i; 
 	var param;
 	param = [i, item.name, item.defaultValue];
-	n.sendMsg("/params", ~synth, param[0], param[1], param[2]);
+	n.sendMsg("/initPatchParams", ~synth, param[0], param[1], param[2]);
 });
 
 /*
@@ -140,7 +140,7 @@ Note off function.
 MIDIdef.noteOff(\noteOffDef, {
 	arg vel, nn;
 	var temp;
-	[vel, nn].postln;
+	[vel, nn]. ;
 	n.sendMsg("/noteOff",nn,vel);
 	~notes[nn].set(\gate, 0);
 	~notes[nn] = nil;
