@@ -79,10 +79,9 @@ o = OSCFunc( {
 
 		// Synth patch selector. Sets the currently active patch
 		{msg[1] == "selectPatch".asSymbol} {
-			~synth = msg[2].asString;
 			MIDIdef.freeAll;
-			msg[3].asString.load;
-	        ~synth.postln;
+			msg[2].asString.load;
+	    ~synth.postln;
 		}
 
 		{msg[1] == "stopScSynth".asSymbol} {
@@ -90,7 +89,7 @@ o = OSCFunc( {
 		}
 
 		// compiles all SynthDef's.
-		{msg[1] == "precompileAllPatches".asSymbol} {
+		{msg[1] == "compile".asSymbol} {
 			msg[2].asString.load;
 			MIDIdef.freeAll;
 		}
