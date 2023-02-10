@@ -84,6 +84,12 @@ o = OSCFunc( {
 	    ~synth.postln;
 		}
 
+		// Pattern selector. Sets the currently active pattern
+		{msg[1] == "selectPattern".asSymbol} {
+			MIDIdef.freeAll;
+			msg[2].asString.load;
+		}
+
 		{msg[1] == "stopScSynth".asSymbol} {
 			Server.killAll;
 		}
