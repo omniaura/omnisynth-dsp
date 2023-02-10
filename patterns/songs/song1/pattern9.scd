@@ -55,7 +55,7 @@ o = OSCFunc({
 	).quant_(~bpm);
 	
 	case
-		{msg[1] == "playerSel".asSymbol} {
+		{msg[1] == "setPatternState".asSymbol} {
 			if (msg[2] == "start".asSymbol) {
 				Pdef('\pattern9').play;
 			};
