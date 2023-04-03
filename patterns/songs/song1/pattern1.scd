@@ -20,7 +20,7 @@ o = OSCFunc({
 	case
 
 		// Parameter adjustment.
-		{msg[1] == "paramSel".asSymbol} {
+		{msg[1] == "setParam".asSymbol} {
 			if (msg[2] == "bpm".asSymbol) {
 				~bpm = (60 / msg[3].asInteger) * 4;
 			};
@@ -60,7 +60,7 @@ o = OSCFunc({
 	)).quant_(~bpm);
 
 	case
-		{msg[1] == "playerSel".asSymbol} {
+		{msg[1] == "setPatternState".asSymbol} {
 			if (msg[2] == "start".asSymbol) {
 				Pdef('\pattern1').play;
 			};

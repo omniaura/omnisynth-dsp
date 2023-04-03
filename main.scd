@@ -11,7 +11,7 @@ Set server options
 p = Server.default.options;
 
 // Set default device to ASIO
-p.device = "ASIO : ASIO4ALL v2";
+// p.device = "ASIO : ASIO4ALL v2";
 
 // Set memSize to 16MB (from 8MB default)
 // Only use if you're having memory issues
@@ -42,16 +42,22 @@ MIDIIn.connectAll;
 ~output_devices = ServerOptions.outDevices;
 
 s.doWhenBooted({
+	"Booted! Executing boot init logic...".postln;
+	~devices_for_messages = List.new(0);
 	~output_devices.do({
 		arg item, i;
 		var out_dev;
-		out_dev = [i, item];
-		n.sendMsg("/outDev", out_dev[0], out_dev[1]);
-		// wait 5ms before sending the next request
-		// todo: bundle this so we send all at once?
-		(0.005).wait;
+		out_dev = [i.asInteger, item.asString];
+		~devices_for_messages.add(out_dev);
+		// n.sendMsg("/outDev", out_dev[0], out_dev[1]);
+		// // wait 5ms before sending the next request
+		// // todo: bundle this so we send all at once?
+		// (0.005).wait;
 	});
-	n.sendMsg("/server", "running");
+	"Sending 'setOutputDevices' message...".postln;
+	n.sendMsg("/setOutputDevices", *(~devices_for_messages.asArray));
+	"Sending 'superColliderStatus' message...".postln;
+	n.sendMsg("/superColliderStatus", "running");
 });
 
 
@@ -71,15 +77,20 @@ o = OSCFunc( {
 
 	case
 
-		// Synth patch selector.
-		{msg[1] == "synthSel".asSymbol} {
-			~synth = msg[2].asString;
+		// Synth patch selector. Sets the currently active patch
+		{msg[1] == "selectPatch".asSymbol} {
 			MIDIdef.freeAll;
-			msg[3].asString.load;
-	        ~synth.postln;
+			msg[2].asString.load;
+	    ~synth.postln;
 		}
 
-		{msg[1] == "exitSel".asSymbol} {
+		// Pattern selector. Sets the currently active pattern
+		{msg[1] == "selectPattern".asSymbol} {
+			MIDIdef.freeAll;
+			msg[2].asString.load;
+		}
+
+		{msg[1] == "stopScSynth".asSymbol} {
 			Server.killAll;
 		}
 
@@ -89,12 +100,12 @@ o = OSCFunc( {
 			MIDIdef.freeAll;
 		}
 
-		{msg[1] == "outDevSel".asSymbol} {
+		{msg[1] == "selectOutputDevice".asSymbol} {
 			Server.default.options.outDevice_((msg[2].asString));
 			Server.default.reboot;
 		}
 
-		{msg[1] == "pdef_control".asSymbol} {
+		{msg[1] == "controlPattern".asSymbol} {
 			if (msg[2] == "compile".asSymbol) {
 				msg[3].asString.load;
 			};

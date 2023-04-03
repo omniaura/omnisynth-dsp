@@ -29,7 +29,7 @@ o = OSCFunc({
 	case
 
 		// Parameter adjustment.
-		{msg[1] == "filterSel".asSymbol} {
+		{msg[1] == "setParam".asSymbol} {
 			if (msg[2] == "lpf".asSymbol) {
 				~lpf_cutoff = msg[3].asFloat;
 			};
@@ -115,7 +115,7 @@ d = SynthDef.new(~synth, {
 	arg item, i; 
 	var param;
 	param = [i, item.name, item.defaultValue];
-	n.sendMsg("/params", ~synth, param[0], param[1], param[2]);
+	n.sendMsg("/initPatchParams", ~synth, param[0], param[1], param[2]);
 });
 
 /*
